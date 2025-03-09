@@ -214,4 +214,4 @@ Following are the models we tried for this project:
     * cache_size: the size of the kernel cache in MB. A larger cache can speed up computation for large datasets but may use more memory
     * shrinking: whether to use the shrinking heuristic to speed up training. When True, it allows the SVR algorithm to ignore support vectors that do not significantly affect the optimization process. Essentially, it uses an approximation to improve the efficiency of the model training.
 
-We compare the MAE, MSE and RMSE of all models to select the best model.
+We compare the RMSE of all models to select the best model (for this project the best model is XGBoost).
