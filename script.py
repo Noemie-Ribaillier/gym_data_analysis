@@ -1,9 +1,9 @@
 ########################################################################################################
 #####                                                                                              #####
-#####                        DATA PROJECT ABOUT CALORIES BURNED AT THE GYM                         #####
+#####                         DATA PROJECT ABOUT CALORIES BURNT AT THE GYM                         #####
 #####                                      Noemie RIBAILLIER                                       #####
 #####                                    Created on: 2024-10-22                                    #####
-#####                                    Updated on: 2025-03-06                                    #####
+#####                                    Updated on: 2025-03-09                                    #####
 #####                                                                                              #####
 ########################################################################################################
 
@@ -56,14 +56,14 @@ gym_data.columns = gym_data.columns.str.lower()
 gym_data = gym_data.rename(columns={"weight (kg)": "weight", "height (m)": "height",
                          'session_duration (hours)':'session_duration',
                          'water_intake (liters)':'water_intake',
-                         'workout_frequency (days/week)':'workout_frequency'})
+                         'workout_frequency (days/week)':'workout_frequency',
+                         "calories_burned": "calories_burnt"})
 
 # Handle categorical variables (to optimize memory and performance)  
 # Check the type of each variable
 gym_data.dtypes 
-categoric_variable = ['gender','workout_type','workout_frequency','experience_level']
-gym_data[categoric_variable] = gym_data[categoric_variable].astype('category')
-
+categorical_variable = ['gender','workout_type','workout_frequency','experience_level']
+gym_data[categorical_variable] = gym_data[categorical_variable].astype('category')
 
 # Double check the column names and column types
 gym_data.dtypes
@@ -74,46 +74,51 @@ gym_data.dtypes
 ########################################################################################################
 
 # GENDER
-categoric_univariate_analysis(gym_data,'gender')
+categorical_univariate_analysis(gym_data,'gender')
 
 # AGE
-numeric_univariate_analysis(gym_data,['age'],'Age')
+numerical_univariate_analysis(gym_data,['age'],'Age')
 
 # BPM
-numeric_univariate_analysis(gym_data,['resting_bpm','avg_bpm','max_bpm'],'BPM')
+numerical_univariate_analysis(gym_data,['resting_bpm','avg_bpm','max_bpm'],'BPM')
 
 # WEIGHT
-numeric_univariate_analysis(gym_data,['weight'],'Weight')
+numerical_univariate_analysis(gym_data,['weight'],'Weight')
 
 # HEIGHT
-numeric_univariate_analysis(gym_data,['height'],'Height')
+numerical_univariate_analysis(gym_data,['height'],'Height')
 
 # SESSION_DURATION
-numeric_univariate_analysis(gym_data,['session_duration'],'Session duration')
+numerical_univariate_analysis(gym_data,['session_duration'],'Session duration')
 
-# CALORIES_BURNED
-numeric_univariate_analysis(gym_data,['calories_burned'],'Calories burned')
+# CALORIES_BURNT
+numerical_univariate_analysis(gym_data,['calories_burnt'],'Calories burnt')
 
 # WORKOUT_TYPE
-categoric_univariate_analysis(gym_data,'workout_type')
+categorical_univariate_analysis(gym_data,'workout_type')
 
 # FAT_PERCENTAGE
-numeric_univariate_analysis(gym_data,['fat_percentage'],'Fat percentage')
+numerical_univariate_analysis(gym_data,['fat_percentage'],'Fat percentage')
 
 # WATER_INTAKE
-numeric_univariate_analysis(gym_data,['water_intake'],'Water intake')
+numerical_univariate_analysis(gym_data,['water_intake'],'Water intake')
 
 # WORKOUT_FREQUENCY
-categoric_univariate_analysis(gym_data,'workout_frequency')
+categorical_univariate_analysis(gym_data,'workout_frequency')
 
 # EXPERIENCE_LEVEL
-categoric_univariate_analysis(gym_data,'experience_level')
+categorical_univariate_analysis(gym_data,'experience_level')
 
 # BMI
-numeric_univariate_analysis(gym_data,['bmi'],'BMI')
+numerical_univariate_analysis(gym_data,['bmi'],'BMI')
 # Check that bmi is well the weight divided by the square of the size
 gym_data['computed_bmi'] = round(gym_data['weight']/(gym_data['height'])**2,2)
 gym_data.loc[gym_data['computed_bmi']!=gym_data['bmi'],['bmi','weight','height','computed_bmi']]
+# Get the proportion per class of BMI
+np.round(gym_data.loc[(gym_data['bmi']<18.5)].shape[0]*100/gym_data.shape[0],2)
+np.round(gym_data.loc[(gym_data['bmi']>=18.5) & (gym_data['bmi']<25)].shape[0]*100/gym_data.shape[0],2)
+np.round(gym_data.loc[(gym_data['bmi']>=25) & (gym_data['bmi']<30)].shape[0]*100/gym_data.shape[0],2)
+np.round(gym_data.loc[(gym_data['bmi']>=30)].shape[0]*100/gym_data.shape[0],2)
 
 
 ########################################################################################################
@@ -121,164 +126,53 @@ gym_data.loc[gym_data['computed_bmi']!=gym_data['bmi'],['bmi','weight','height',
 ########################################################################################################
 
 # AGE
-numeric_bivariate_analysis(gym_data,'age','calories_burned')
+numerical_numerical_bivariate_analysis(gym_data,'age','calories_burnt')
 
 # WEIGHT
-numeric_bivariate_analysis(gym_data,'weight','calories_burned')
+numerical_numerical_bivariate_analysis(gym_data,'weight','calories_burnt')
 
 # HEIGHT
-numeric_bivariate_analysis(gym_data,'height','calories_burned')
+numerical_numerical_bivariate_analysis(gym_data,'height','calories_burnt')
 
 # MAX_BPM
-numeric_bivariate_analysis(gym_data,'max_bpm','calories_burned')
+numerical_numerical_bivariate_analysis(gym_data,'max_bpm','calories_burnt')
 
 # AVG_BPM
-numeric_bivariate_analysis(gym_data,'avg_bpm','calories_burned')
+numerical_numerical_bivariate_analysis(gym_data,'avg_bpm','calories_burnt')
 
 # RESTING_BPM
-numeric_bivariate_analysis(gym_data,'resting_bpm','calories_burned')
+numerical_numerical_bivariate_analysis(gym_data,'resting_bpm','calories_burnt')
 
 # SESSION_DURATION
-numeric_bivariate_analysis(gym_data,'session_duration','calories_burned')
+numerical_numerical_bivariate_analysis(gym_data,'session_duration','calories_burnt')
 
 # FAT_PERCENTAGE
-numeric_bivariate_analysis(gym_data,'fat_percentage','calories_burned')
+numerical_numerical_bivariate_analysis(gym_data,'fat_percentage','calories_burnt')
 
 # WATER_INTAKE
-numeric_bivariate_analysis(gym_data,'water_intake','calories_burned')
+numerical_numerical_bivariate_analysis(gym_data,'water_intake','calories_burnt')
 
 # BMI
-numeric_bivariate_analysis(gym_data,'bmi','calories_burned')
+numerical_numerical_bivariate_analysis(gym_data,'bmi','calories_burnt')
 
 # GENDER
-categoric_bivariate_analysis(gym_data,'gender','calories_burned')
+numerical_categorical_bivariate_analysis(gym_data,'gender','calories_burnt')
 
 # WORKOUT_TYPE
-categoric_bivariate_analysis(gym_data,'workout_type','calories_burned')
+numerical_categorical_bivariate_analysis(gym_data,'workout_type','calories_burnt')
 
 # EXPERIENCE_LEVEL
-categoric_bivariate_analysis(gym_data,'experience_level','calories_burned')
+numerical_categorical_bivariate_analysis(gym_data,'experience_level','calories_burnt')
 
 # WORKOUT_FREQUENCY
-categoric_bivariate_analysis(gym_data,'workout_frequency','calories_burned')
-
-# 
-
-
-
-
-
-
-
-
-########################################################################################################
-#####                                   2 CATEGORICAL VARIABLES                                    #####
-########################################################################################################
-
-# This is a categoric to categoric relationship, methods:
-# chi-squared test: determine association between categorical variabes
-# flat/stacked bar chart
-
-# Compare the relationship between gender and workout type
-
-# Plot
-subset_gender_workouttype = gym_data[['gender','workout_type','bmi']]
-genders = sorted(subset_gender_workouttype['gender'].unique().tolist())
-workout_types = sorted(subset_gender_workouttype['workout_type'].unique().tolist())
-subset_gender_workouttype_pt = np.array(pd.pivot_table(subset_gender_workouttype, index=[ 'gender'],columns='workout_type',aggfunc='count'))
-subset_gender_workouttype_summary = np.round(subset_gender_workouttype_pt*100/subset_gender_workouttype_pt.sum(axis=1)[:,None],1)
-print(subset_gender_workouttype_summary)
-plt.figure(figsize=(10, 6))
-plt.bar(genders, subset_gender_workouttype_summary[:, 0], label=workout_types[0])
-for i in range(1, subset_gender_workouttype_summary.shape[1]):
-    plt.bar(genders, subset_gender_workouttype_summary[:, i], bottom=subset_gender_workouttype_summary[:, :i].sum(axis=1), label=workout_types[i])
-plt.xlabel('Genders')
-plt.ylabel('Pct')
-plt.title('Difference of the workout type per gender')
-plt.legend(title='Workout type',loc='upper right')
-plt.tight_layout()
-plt.xticks(genders,genders)
-plt.show()
-
-
-# TEST
-# contingency table (pivot table)
-contingency_table = pd.crosstab(gym_data['gender'],gym_data['workout_type'])
-# Formulating hypothesis
-# H0: there is no relationship between gender and workout_type
-# H1: there is a significant association between the 2 variables
-chi2_stat, p_value, dof, expected = stats.chi2_contingency(contingency_table)
-print(chi2_stat, p_value, dof, expected)
-# Interpreting results
-# pvalue=0.7>0.05, meaning we don't reject H0
-
-
-# Compare the relationship between experience level and workout frequency
-
-# PLot
-subset_explevel_workoutfreq = gym_data[['experience_level','workout_frequency','bmi']]
-experience_levels = sorted(subset_explevel_workoutfreq['experience_level'].unique().tolist())
-workout_frequencies = sorted(subset_explevel_workoutfreq['workout_frequency'].unique().tolist())
-subset_explevel_workoutfreq_pt = np.array(pd.pivot_table(subset_explevel_workoutfreq, index=[ 'experience_level'],columns='workout_frequency',aggfunc='count'))
-subset_explevel_workoutfreq_summary = np.round(subset_explevel_workoutfreq_pt*100/subset_explevel_workoutfreq_pt.sum(axis=1)[:,None],1)
-print(subset_explevel_workoutfreq_summary)
-plt.figure(figsize=(10, 6))
-plt.bar(experience_levels, subset_explevel_workoutfreq_summary[:, 0], label=workout_frequencies[0])
-for i in range(1, subset_explevel_workoutfreq_summary.shape[1]):
-    plt.bar(experience_levels, subset_explevel_workoutfreq_summary[:, i], bottom=subset_explevel_workoutfreq_summary[:, :i].sum(axis=1), label=workout_frequencies[i])
-plt.xlabel('Experience levels')
-plt.ylabel('Pct')
-plt.title('Difference of the workout frequency per experience level')
-plt.legend(title='Workout frequencies',loc='upper right')
-plt.tight_layout()
-plt.xticks(experience_levels,experience_levels)
-plt.show()
-# We see that low experienced people only practice the less per week while high experienced people practice the most per week
-
-# TEST
-contingency_table = pd.crosstab(gym_data['workout_frequency'],gym_data['experience_level'])
-# Formulating hypothesis
-# H0: there is no relationship between experience level and workout_frequency
-# H1: there is a significant association between the 2 variables
-chi2_stat, p_value, dof, expected = stats.chi2_contingency(contingency_table)
-print(chi2_stat, p_value, dof, expected)
-# Interpreting results
-# pvalue<2.2e-16<0.05, meaning we reject H0, the 2 variables are not independent
-observed = contingency_table.values
-residuals = (observed - expected)/np.sqrt(expected)
-print(residuals)
-# residuals of exp=1 and freq=2 are positive and pretty large, meaning that the observed count is higher than the expected count
-# residuals of exp=3 and freq=5 are positive and very large, meaning that the observed count is way higher than the expected count
-# negative residuals mean that the observed count < expected count
-# contribution diagram:
-contributions = (observed-expected)**2/expected
-total_chi_square = chi2_stat
-percentage_contributions = 100 * contributions / total_chi_square
-print(np.round(percentage_contributions, 2))
-
-# Plot the contributions
-plt.figure(figsize=(10, 8))
-ax = sns.heatmap(
-    percentage_contributions,
-    annot=True,          # Display numbers
-    fmt=".2f",          # Format of the numbers (adjust as needed)
-    cmap="coolwarm",     # Color map (adjust as needed)
-    cbar_kws={"label": "Percentage Contribution"}, # Color bar label
-    linewidths=0.5      # Space between cells
-)
-# Set the title
-plt.title("Percentage contribution to Chi-Square statistic")
-# Display the heatmap
-plt.tight_layout()
-plt.show()
-# we just what we just noticed: what's contributing the most to the chi2 stat is the exp=3 and freq=5
+numerical_categorical_bivariate_analysis(gym_data,'workout_frequency','calories_burnt')
 
 
 ########################################################################################################
 #####                                           ENCODING                                           #####
 ########################################################################################################
 
-# Encode the categorical nominal variables
+# Encode the nominal categorical variables
 gym_data_encoded = gym_data.copy()
 
 # Encode gender (transform from Female/Male to 0/1)
@@ -299,10 +193,17 @@ workout_type_encoded_df = pd.DataFrame(workout_type_encoded, columns=categories_
 gym_data_encoded = gym_data_encoded.join(workout_type_encoded_df)
 gym_data_encoded = gym_data_encoded.drop(['yoga','workout_type'],axis=1)
 
+# Transform the ordinal categorical variables to numerical
+gym_data_encoded[['experience_level', 'workout_frequency', 'cardio', 'hiit', 'strength']] = gym_data_encoded[['experience_level', 'workout_frequency', 'cardio', 'hiit', 'strength']].astype('int')
+
+# Drop bmi variable since it's computed from height and weight so multicolinearity
+gym_data_encoded = gym_data_encoded.drop('bmi',axis=1)
+
 
 # Check the dimensions and encoding
 gym_data_encoded.shape
 gym_data_encoded.columns
+gym_data_encoded.dtypes
 gym_data_encoded[['gender','cardio','hiit','strength']].head()
 gym_data[['gender','workout_type']].head()
 
@@ -312,8 +213,8 @@ gym_data[['gender','workout_type']].head()
 ########################################################################################################
 
 # Split data into features (X) and label (Y)
-X = gym_data_encoded.drop('calories_burned', axis = 1)
-y = gym_data_encoded.calories_burned
+X = gym_data_encoded.drop('calories_burnt', axis = 1)
+y = gym_data_encoded.calories_burnt
 print(X.head())
 print(y.head())
 
@@ -354,17 +255,17 @@ decision_tree_param_grid = {
     # Measure the quality of a split
     'criterion': ['squared_error'],
     # Maximum depth of the tree
-    'max_depth': [5, 10, 20], #try with 3,5,7
+    'max_depth': [3, 5, 7],
     # Minimum number of samples required to split an internal node
     'min_samples_split': [3, 5, 10],
     # Minimum number of samples required to be at a leaf node
     'min_samples_leaf': [2, 4, 6],
     # Number of features to consider for the best split
-    'max_features': [None, 'sqrt', 'log2'],
+    'max_features': [None, 'sqrt', 12],
     # Strategy used to split at each node
     'splitter': ['best', 'random'],
     # Maximum number of leaf nodes
-    'max_leaf_nodes': [None, 10, 20, 30],
+    'max_leaf_nodes': [None, 10, 20, 30]
 }
 
 # Create Decision Trees regressor model (get the best parameters, train and evaluate the model, save the main statistics in a list to compare with all models)
@@ -398,12 +299,6 @@ all_mae, all_mse, all_rmse, all_r2, all_models = regression_model(
     all_mae, all_mse, all_rmse, all_r2, all_models)
 
 
-# R2: 76.45%
-# MAE: 96.39
-# MSE: 14832.08
-# RMSE: 121.79
-
-
 ########################################################################################################
 #####                                RANDOM FOREST REGRESSOR MODEL                                 #####
 ########################################################################################################
@@ -416,7 +311,7 @@ rf_param_grid = {
     # Number of trees in the forest
     'n_estimators': [100, 200, 300, 400, 500],
     # Maximum depth of each tree
-    'max_depth': [5, 10, 20],               #try with 3,5,7
+    'max_depth': [3, 5, 7],
     # Minimum number of samples required to split a node
     'min_samples_split': [3, 5, 10],
     # Minimum number of samples required at a leaf node
@@ -476,7 +371,7 @@ xgboost_regressor = XGBRegressor(enable_categorical=True, random_state=21)
 # Hyperparameters grid
 xgboost_param_grid = {
     # Number of boosting rounds (trees)
-    'n_estimators': [100, 200, 300],
+    'n_estimators': [100, 200, 300, 400, 500],
     # Step size for each boosting round
     'learning_rate': [0.01, 0.05, 0.1],
     # Maximum depth of individual trees
@@ -484,9 +379,9 @@ xgboost_param_grid = {
     # Minimum sum of instance weights in a child
     'min_child_weight': [1, 5, 10],
     # Fraction of samples used for fitting each tree
-    'subsample': [0.8, 0.9, 1.0],
+    'subsample': [0.8, 1.0], #0.9, 
      # Fraction of features used for each tree
-    'colsample_bytree': [0.8, 0.9, 1.0],
+    'colsample_bytree': [0.8, 1.0], #0.9, 
     # Minimum loss reduction required to make a further partition
     'gamma': [0, 0.1, 0.2],
     # L1 regularization term on weights
@@ -505,60 +400,12 @@ all_mae, all_mse, all_rmse, all_r2, all_models = regression_model(
     all_mae, all_mse, all_rmse, all_r2, all_models)
 
 
-
-
-
-
-
-
-# # Initialize GridSearchCV for hyperparameter tuning with CV
-# # n_jobs=-1: using all processors
-# # verbose=1: doesn't print anything (otherwise it prints a line for each combination of parameters tested and each CV folder)
-# xgboost_grid_search = GridSearchCV(estimator = xgboost_regressor, param_grid = xgboost_param_grid, cv = kf, 
-#                               scoring='neg_root_mean_squared_error', n_jobs = -1, verbose = 1)
-
-# # Fit the model with GridSearchCV 
-# xgboost_grid_search.fit(X_train, y_train)
-
-# # Print the best hyperparameters
-# print("Best Hyperparameters:", xgboost_grid_search.best_params_)
-
-# # Get the best model from grid search
-# xgboost_best_model = xgboost_grid_search.best_estimator_
-
-# # Train the model
-# xgboost_best_model.fit(X_train, y_train)
-
-# # Predict on the test set
-# xgboost_y_pred = xgboost_best_model.predict(X_test)
-
-# # Evaluate the model on the test set
-# xgboost_mae, xgboost_mse, xgboost_rmse, xgboost_r2, xgboost_reg_report = regression_report(y_test, xgboost_y_pred)
-# print(xgboost_reg_report)
-
-# # Append all the statistics to the global lists
-# all_mae.append(xgboost_mae)
-# all_mse.append(xgboost_mse)
-# all_rmse.append(xgboost_rmse)
-# all_r2.append(xgboost_r2)
-# all_models.append(xgboost_best_model)
-
-
-
-# -----------------------------------------------------------------------------------------------------------------------
-
-xgb2=xgboost_regressor.fit(X_train, y_train)
-xgb_y_pred = xgb2.predict(X_test)
-xgb_mae2, xgb_mse2, xgb_rmse2, xgb_r22, xgb_reg_report2 = regression_report(y_test, xgb_y_pred)
-print(xgb_reg_report2)
-
-
 ########################################################################################################
 #####                            SUPPORT VECTOR MACHINE REGRESSOR MODEL                            #####
 ########################################################################################################
 
 # Initialize the Support Vector Machine Regressor
-svr_regressor = SVR(random_state=21)
+svr_regressor = SVR()
 
 # Hyperparameters grid
 svr_param_grid = {
@@ -567,7 +414,7 @@ svr_param_grid = {
     # Regularization parameter (penalty for errors)
     'C': [0.1, 1, 10, 100],  
     # Epsilon parameter, controls margin of tolerance
-    'epsilon': [0.01, 0.1, 0.2, 0.5],
+    'epsilon': [0.01, 0.1, 1, 10],
     # Degree of the polynomial kernel function (only relevant for 'poly')
     'degree': [2, 3, 4],
     # Kernel coefficient for 'rbf', 'poly', and 'sigmoid'
@@ -580,84 +427,29 @@ svr_param_grid = {
     'shrinking': [True, False]
 }
 
-# kernel: Specifies the type of kernel to use in the SVR:
-# 'linear' for linear regression.
-# 'poly' for polynomial kernel.
-# 'rbf' (Radial Basis Function) for non-linear regression (most common).
-# C: The regularization parameter. It trades off the model's ability to fit the training data versus its ability to generalize to new data:
-# A higher C value means the model tries to fit the training data more closely (but might overfit).
-# A lower C value allows more error but improves generalization.
-# epsilon: The margin of tolerance within which no penalty is given for errors. A small epsilon value makes the model sensitive to the training data, while a larger value allows more margin for error.
-# degree: The degree of the polynomial kernel function (only used when the kernel is 'poly'). Higher degrees can model more complex relationships, but may also increase the risk of overfitting.
-# gamma: The kernel coefficient for 'rbf', 'poly', and 'sigmoid' kernels. It determines the influence of a single training example on the decision boundary:
-# 'scale' is 1 / (n_features * X.var()), which is generally a good default.
-# 'auto' is 1 / n_features.
-# A small value makes the model more general, while a larger value makes it more sensitive to individual points (increases complexity and risk of overfitting).
-# tol: The tolerance for stopping criteria. Smaller values will make the algorithm run for longer but may result in more accurate results.
-# cache_size: The size of the kernel cache in MB. A larger cache can speed up computation for large datasets but may use more memory.
-# shrinking: Whether to use the shrinking heuristic to speed up training. When True, it can help speed up the convergence of the algorithm by reducing the number of support vectors considered at each step.
-
-
+# Create SVR regressor model (get the best parameters, train and evaluate the model, save the main statistics in a list to compare with all models)
 all_mae, all_mse, all_rmse, all_r2, all_models = regression_model(
     svr_regressor, svr_param_grid, kf, X_train, y_train, X_test, y_test, 
     all_mae, all_mse, all_rmse, all_r2, all_models)
-
-
-# # Initialize GridSearchCV for hyperparameter tuning with CV
-# # n_jobs=-1: using all processors
-# # verbose=1: doesn't print anything (otherwise it prints a line for each combination of parameters tested and each CV folder)
-# svr_grid_search = GridSearchCV(estimator = svr_regressor, param_grid = svr_param_grid, cv = kf, 
-#                               scoring='neg_root_mean_squared_error', n_jobs = -1, verbose = 1)
-
-# # Fit the model with GridSearchCV 
-# svr_grid_search.fit(X_train, y_train)
-
-# # Print the best hyperparameters
-# print("Best Hyperparameters:", svr_grid_search.best_params_)
-
-# # Get the best model from grid search
-# svr_best_model = svr_grid_search.best_estimator_
-
-# # Train the model
-# svr_best_model.fit(X_train, y_train)
-
-# # Predict on the test set
-# svr_y_pred = svr_best_model.predict(X_test)
-
-# # Evaluate the model on the test set
-# svr_mae, svr_mse, svr_rmse, svr_r2, svr_reg_report = regression_report(y_test, svr_y_pred)
-# print(svr_reg_report)
-
-# # Append all the statistics to the global lists
-# all_mae.append(svr_mae)
-# all_mse.append(svr_mse)
-# all_rmse.append(svr_rmse)
-# all_r2.append(svr_r2)
-# all_models.append(svr_best_model)
-
-
-
-
-
-# -----------------------------------------------------------------------------------------------------------------------
-
-svr2=svr_regressor.fit(X_train, y_train)
-svr_y_pred2 = svr2.predict(X_test)
-svr_mae2, svr_mse2, svr_rmse2, svr_r22, svr_reg_report2 = regression_report(y_test, svr_y_pred2)
-print(svr_reg_report2)
 
 
 ########################################################################################################
 #####                         COMPARE ALL THE MODELS AND SAVE THE BEST ONE                         #####
 ########################################################################################################
 
-# Get the best model (with the lowest RMSE)
-index_min_mae = all_mae.index(min(all_mae))
-index_min_mse = all_mse.index(min(all_mse))
+# Pick the lowest RMSE
 index_min_rmse = all_rmse.index(min(all_rmse))
-index_min_r2 = all_r2.index(max(all_r2))
-all_models[index_min_mae],all_models[index_min_mse],all_models[index_min_rmse],all_models[index_min_r2]
+print('RMSE of the best model is (min RMSE among all trained models) is: '+str(np.round(all_rmse[index_min_rmse],2)))
+print('MAE of the best model is (min MAE among all trained models) is: '+str(np.round(all_mae[index_min_rmse],2)))
+
+# Check the R2 of the best model
+print('R2 of the best model is: '+str(np.round(all_r2[index_min_rmse],2)*100)+'%')
+
+# Get the best model (with the lowest RMSE)
 best_model = all_models[index_min_rmse]
+model_name = best_model.__class__.__name__
+print(f"The best model (among all trained models) is: {model_name}")
+print("The best model (among all trained models) with its tuned parameters is: "+str(best_model))
 
 # Save the model (and all the encoders)
 saved_model = {"model": best_model,  "gender_encoder": gender_encoder, "workout_type_encoder": workout_type_encoder}
